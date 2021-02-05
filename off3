@@ -10,6 +10,7 @@ import sys
 import mimetypes
 import hashlib
 import urllib.request, urllib.error, urllib.parse
+import ssl
 
 def to_from(reason, to, fr):
   if not to: to = '[...]'
@@ -62,8 +63,9 @@ def download_if_needed(url, mime_type, reason):
     try:
       request = urllib.request.Request(url)
       request.add_header('User-Agent', 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11')
-      opener = urllib.request.build_opener()  
-      f = opener.open(request)
+      # enable if you get ssl warning: context = ssl._create_unverified_context()
+      # enable if you get ssl warning: f = urllib.request.urlopen(request, context=context)
+      f = urllib.request.urlopen(request)
     except Exception as e:
       raise Exception("Failed to open URL '%s': %s" % (url, e))
     x = f.read()
